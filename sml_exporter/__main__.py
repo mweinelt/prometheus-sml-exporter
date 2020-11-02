@@ -8,12 +8,7 @@ from . import SmlExporter
 
 
 @click.command()
-@click.argument(
-    "tty",
-    default="/dev/ttyUSB0",
-    type=click.Path(exists=True),
-    help="Path to the D0 serial device",
-)
+@click.argument("tty", default="/dev/ttyUSB0", type=click.Path(exists=True))
 @click.option(
     "--http-port",
     "-p",

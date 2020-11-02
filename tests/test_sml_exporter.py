@@ -1,4 +1,4 @@
-from prometheus_sml_exporter import __version__
+from sml_exporter import __version__
 
 
 def test_version():
