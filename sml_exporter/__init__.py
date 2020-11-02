@@ -73,7 +73,7 @@ class SmlExporter:
             logging.warning("Unhandled OBIS ID: %s", obis_id)
             raise KeyError
 
-        self.metrics[obis_id] = metric(name, f"{desc} ({obis_id})", [vendor, device])
+        self.metrics[obis_id] = metric(name, f"{desc} ({obis_id})", ['vendor', 'device'])
         self.metrics[obis_id].labels(vendor=self.vendor, device=self.device)
 
         return self.metrics[obis_id]
