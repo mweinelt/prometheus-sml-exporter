@@ -57,6 +57,9 @@ class SmlExporter:
             # vendor
             elif obis_id == '129-129:199.130.3*255':
                 self.vendor = val.get('value')
+            # public key
+            elif obis_id == '129-129:199.130.5*255':
+                continue
 
             else:
                 try:
