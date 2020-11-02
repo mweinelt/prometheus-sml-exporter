@@ -4,7 +4,7 @@ import logging
 from prometheus_client import Gauge
 from sml import SmlGetListResponse, SmlSequence
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 logger = logging.getLogger(__name__)
 

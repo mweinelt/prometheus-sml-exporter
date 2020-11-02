@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sml-exporter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Smartmeter Message Language Prometheus Exporter"
 authors = ["Martin Weinelt <hexa@darmstadt.ccc.de>"]
 license = "MIT"
