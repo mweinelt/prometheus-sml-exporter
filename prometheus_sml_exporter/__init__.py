@@ -23,22 +23,26 @@ OBIS = {
 
 class SmlExporter:
     def __init__(self):
-        self.device_id = None
+        self.device = None
         self.vendor = None
         self.metrics = {}
-        
+
     def get_metric(self, obis_id):
+        # skip until we have seen vendor and device identifier, so we can populate the according labels
+        if not self.device or not self.vendor:
+            return
+
         if obis_id in self.metrics:
             return self.metrics[obis_id]
 
         try:
             metric, name, desc = OBIS[obis_id]
-            print(metric, name, desc)
         except KeyError:
             logging.warning("Unhandled OBIS ID: %s", obis_id)
             raise KeyError
 
-        self.metrics[obis_id] = metric(name, desc)
+        self.metrics[obis_id] = metric(name, f"{desc} ({obis_id})", [vendor, device])
+        self.metrics[obis_id].labels(vendor=self.vendor, device=self.device)
 
         return self.metrics[obis_id]
 
@@ -49,7 +53,7 @@ class SmlExporter:
 
             # device id
             if obis_id == '1-0:0.0.9*255':
-                self.device_id = val.get('value')
+                self.device = val.get('value')
             # vendor
             elif obis_id == '129-129:199.130.3*255':
                 self.vendor = val.get('value')
