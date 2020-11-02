@@ -68,15 +68,15 @@ class SmlExporter:
             return self.metrics[obis_id]
 
         try:
-            metric, name, desc = OBIS[obis_id]
+            _type, name, desc = OBIS[obis_id]
         except KeyError:
             logging.warning("Unhandled OBIS ID: %s", obis_id)
             raise KeyError
 
-        self.metrics[obis_id] = metric(name, f"{desc} ({obis_id})", ['vendor', 'device'])
-        self.metrics[obis_id].labels(vendor=self.vendor, device=self.device)
+        metric = _type(name, f"{desc} ({obis_id})", ["vendor", "device"])
+        self.metrics[obis_id] = metric
 
-        return self.metrics[obis_id]
+        return metric
 
     def event(self, message_body: SmlSequence) -> None:
         assert isinstance(message_body, SmlGetListResponse)
@@ -95,6 +95,8 @@ class SmlExporter:
 
             else:
                 try:
-                    self.get_metric(obis_id).set(val.get("value"))
+                    self.get_metric(obis_id).labels(
+                        vendor=self.vendor, device=self.device
+                    ).set(val.get("value"))
                 except KeyError:
                     pass
