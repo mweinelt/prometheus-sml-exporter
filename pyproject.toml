@@ -4,6 +4,7 @@ version = "0.1.3"
 description = "Smartmeter Message Language Prometheus Exporter"
 authors = ["Martin Weinelt <hexa@darmstadt.ccc.de>"]
 license = "MIT"
+readme = "README.md"
 
 [tool.poetry.scripts]
 sml-exporter = "sml_exporter.__main__:main"
