@@ -2,7 +2,7 @@ import asyncio
 
 import click
 from prometheus_client import start_http_server
-from sml.asyncio import SmlProtocol
+from sml.asyncio import SmlProtocol  # type: ignore
 
 from . import SmlExporter
 

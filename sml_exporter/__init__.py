@@ -1,8 +1,7 @@
-import asyncio
 import logging
 
 from prometheus_client import Gauge
-from sml import SmlGetListResponse, SmlSequence
+from sml import SmlGetListResponse, SmlSequence  # type: ignore
 
 __version__ = "0.1.3"
 
@@ -59,10 +58,10 @@ class SmlExporter:
         self.vendor = None
         self.metrics = {}
 
-    def get_metric(self, obis_id):
+    def get_metric(self, obis_id: str) -> Gauge:
         # skip until we have seen vendor and device identifier, so we can populate the according labels
         if not self.device or not self.vendor:
-            return
+            raise ValueError
 
         if obis_id in self.metrics:
             return self.metrics[obis_id]
@@ -98,5 +97,5 @@ class SmlExporter:
                     self.get_metric(obis_id).labels(
                         vendor=self.vendor, device=self.device
                     ).set(val.get("value"))
-                except KeyError:
+                except (KeyError, ValueError):
                     pass
