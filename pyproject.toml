@@ -24,13 +24,15 @@ classifiers = [
 sml-exporter = "sml_exporter.__main__:main"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-pysml = "^0.0.2"
-prometheus-client = "^0.8.0"
-click = "^7.1.2"
+python = "^3.7"
+pysml = "^0.0.7"
+prometheus-client = "^0"
+click = "^8"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+black = "*"
+isort = "*"
+mypy = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
