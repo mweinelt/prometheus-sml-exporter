@@ -25,7 +25,7 @@ sml-exporter = "sml_exporter.__main__:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-pysml = "^0.0.7"
+pysml = "^0.0.8"
 prometheus-client = "^0"
 click = "^8"
 
