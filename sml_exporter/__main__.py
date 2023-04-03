@@ -1,10 +1,11 @@
 import asyncio
+import logging
 
 import click
 from prometheus_client import start_http_server
 from sml.asyncio import SmlProtocol  # type: ignore
 
-from . import SmlExporter
+from . import SmlExporter, logger
 
 
 @click.command()
@@ -17,7 +18,14 @@ from . import SmlExporter
     show_default=True,
     help="HTTP Port for the Prometheus Exporter",
 )
-def main(tty: str, http_port: int) -> None:
+@click.option("--verbose/--no-verbose", "-v", default=False)
+def main(tty: str, http_port: int, verbose: bool) -> None:
+    logging.basicConfig()
+    if verbose:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
+
     handler = SmlExporter()
     proto = SmlProtocol(tty)
     proto.add_listener(handler.event, ["SmlGetListResponse"])
