@@ -51,6 +51,38 @@ OBIS = {
         "Summe Wirkarbeit Lieferung im Tarif 3",
     ),
     "1-0:16.7.0*255": (Gauge, "smartmeter_wirkleistung_w", "Momentane Wirkleistung"),
+    "1-0:32.7.0*255": (Gauge, "smartmeter_spannung_l1_v", "Spannung L1"),
+    "1-0:52.7.0*255": (Gauge, "smartmeter_spannung_l2_v", "Spannung L2"),
+    "1-0:72.7.0*255": (Gauge, "smartmeter_spannung_l3_v", "Spannung L3"),
+    "1-0:31.7.0*255": (Gauge, "smartmeter_strom_l1_a", "Strom L1"),
+    "1-0:51.7.0*255": (Gauge, "smartmeter_strom_l2_a", "Strom L2"),
+    "1-0:71.7.0*255": (Gauge, "smartmeter_strom_l3_a", "Strom L3"),
+    "1-0:81.7.1*255": (
+        Gauge,
+        "smartmeter_phasenwinkel_ul2_ul1_deg",
+        "Phasenwinkel UL2: UL1",
+    ),
+    "1-0:81.7.2*255": (
+        Gauge,
+        "smartmeter_phasenwinkel_ul3_ul1_deg",
+        "Phasenwinkel UL3 : UL1",
+    ),
+    "1-0:81.7.4*255": (
+        Gauge,
+        "smartmeter_phasenwinkel_il1_ul1_deg",
+        "Phasenwinkel IL1 : UL1",
+    ),
+    "1-0:81.7.15*255": (
+        Gauge,
+        "smartmeter_phasenwinkel_il2_ul2_deg",
+        "Phasenwinkel IL2 : UL2",
+    ),
+    "1-0:81.7.26*255": (
+        Gauge,
+        "smartmeter_phasenwinkel_il3_ul3_deg",
+        "Phasenwinkel IL3 : UL3",
+    ),
+    "1-0:14.7.0*255": (Gauge, "smartmeter_netzfrequenz_hz", "Netzfrequenz"),
 }
 
 
@@ -85,21 +117,35 @@ class SmlExporter:
             obis_id = val.get("objName")
 
             # device id
-            if obis_id == "1-0:0.0.9*255":
-                self.device = val.get("value")
+            if obis_id in [
+                "1-0:0.0.9*255",
+                "1-0:96.1.0*255",  # KFM
+            ]:
                 device = val.get("value")
                 if self.device != device:
                     logger.info(f"device: {device}")
                 self.device = device
             # vendor
-            elif obis_id == "129-129:199.130.3*255":
-                self.vendor = val.get("value")
+            elif obis_id in [
+                "129-129:199.130.3*255",
+                "1-0:96.50.1*1",  # KFM
+            ]:
                 vendor = val.get("value")
+                try:
+                    vendor = vendor.decode()
+                except (UnicodeDecodeError, AttributeError):
+                    pass
                 if self.vendor != vendor:
                     logger.info(f"vendor: {vendor}")
                 self.vendor = vendor
             # public key
             elif obis_id == "129-129:199.130.5*255":
+                continue
+            # firmware version
+            elif obis_id == "1-0:0.2.0*0":
+                continue
+            # CRC of configured parameters:
+            elif obis_id == "1-0:96.90.2*1":
                 continue
 
             else:
