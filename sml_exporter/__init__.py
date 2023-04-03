@@ -71,8 +71,7 @@ class SmlExporter:
         try:
             _type, name, desc = OBIS[obis_id]
         except KeyError:
-            logger.warning("Unhandled OBIS ID: %s", obis_id)
-            raise KeyError
+            raise UnhandledObisId
 
         metric = _type(name, f"{desc} ({obis_id})", ["vendor", "device"])
         self.metrics[obis_id] = metric
@@ -99,9 +98,18 @@ class SmlExporter:
                     self.get_metric(obis_id).labels(
                         vendor=self.vendor, device=self.device
                     ).set(val.get("value"))
-                except (KeyError, ValueError):
+                except ValueError:
                     pass
+                except UnhandledObisId:
+                    logger.warning(
+                        f"Unhandled OBIS ID: {obis_id} = {val.get('value')} {val.get('unit','')}"
+                    )
+
         if not self.device or not self.vendor:
             logger.debug(
                 "Vendor or device identifiers not initialized, event was ignored."
             )
+
+
+class UnhandledObisId(Exception):
+    pass
