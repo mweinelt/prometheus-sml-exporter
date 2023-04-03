@@ -101,3 +101,7 @@ class SmlExporter:
                     ).set(val.get("value"))
                 except (KeyError, ValueError):
                     pass
+        if not self.device or not self.vendor:
+            logger.debug(
+                "Vendor or device identifiers not initialized, event was ignored."
+            )
