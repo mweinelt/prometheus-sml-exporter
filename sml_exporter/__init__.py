@@ -79,6 +79,7 @@ class SmlExporter:
         return metric
 
     def event(self, message_body: SmlSequence) -> None:
+        logger.debug(f"message_body: {message_body!r}")
         assert isinstance(message_body, SmlGetListResponse)
         for val in message_body.get("valList", []):
             obis_id = val.get("objName")
@@ -113,6 +114,10 @@ class SmlExporter:
                         f"Unhandled OBIS ID: {obis_id} = {val.get('value')} {val.get('unit','')}"
                     )
 
+        for val in message_body.get("valList", []):
+            logger.debug(
+                f'{val.get("objName"):<15} {val.get("value")!r:>17} {val.get("unit", "")}'
+            )
         if not self.device or not self.vendor:
             logger.debug(
                 "Vendor or device identifiers not initialized, event was ignored."
