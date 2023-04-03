@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, Optional
 
 from prometheus_client import Gauge
 from sml import SmlGetListResponse, SmlSequence  # type: ignore
@@ -53,10 +54,10 @@ OBIS = {
 
 
 class SmlExporter:
-    def __init__(self):
-        self.device = None
-        self.vendor = None
-        self.metrics = {}
+    def __init__(self) -> None:
+        self.device: Optional[str] = None
+        self.vendor: Optional[str] = None
+        self.metrics: Dict[str, Gauge] = {}
 
     def get_metric(self, obis_id: str) -> Gauge:
         # skip until we have seen vendor and device identifier, so we can populate the according labels
