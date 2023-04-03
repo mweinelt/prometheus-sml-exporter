@@ -86,9 +86,17 @@ class SmlExporter:
             # device id
             if obis_id == "1-0:0.0.9*255":
                 self.device = val.get("value")
+                device = val.get("value")
+                if self.device != device:
+                    logger.info(f"device: {device}")
+                self.device = device
             # vendor
             elif obis_id == "129-129:199.130.3*255":
                 self.vendor = val.get("value")
+                vendor = val.get("value")
+                if self.vendor != vendor:
+                    logger.info(f"vendor: {vendor}")
+                self.vendor = vendor
             # public key
             elif obis_id == "129-129:199.130.5*255":
                 continue
