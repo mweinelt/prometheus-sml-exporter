@@ -8,6 +8,7 @@ __version__ = "0.1.4"
 
 logger = logging.getLogger(__name__)
 
+# https://www.promotic.eu/en/pmdoc/Subsystems/Comm/PmDrivers/IEC62056_OBIS.htm
 OBIS = {
     "1-0:1.8.0*255": (
         Gauge,
