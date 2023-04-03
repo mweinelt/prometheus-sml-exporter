@@ -69,7 +69,7 @@ class SmlExporter:
         try:
             _type, name, desc = OBIS[obis_id]
         except KeyError:
-            logging.warning("Unhandled OBIS ID: %s", obis_id)
+            logger.warning("Unhandled OBIS ID: %s", obis_id)
             raise KeyError
 
         metric = _type(name, f"{desc} ({obis_id})", ["vendor", "device"])
