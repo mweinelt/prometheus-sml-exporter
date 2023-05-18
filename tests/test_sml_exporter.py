@@ -1,8 +1,8 @@
-from unittest.mock import Mock, MagicMock
+from unittest.mock import MagicMock, Mock
 
 from sml import SmlGetListResponse  # type: ignore
 
-from sml_exporter import __version__, SmlExporter
+from sml_exporter import SmlExporter, __version__
 
 
 def test_version() -> None:

@@ -1,4 +1,5 @@
 import logging
+from threading import Timer
 from typing import Dict, Optional
 
 from prometheus_client import Gauge
@@ -85,12 +86,15 @@ OBIS = {
     "1-0:14.7.0*255": (Gauge, "smartmeter_netzfrequenz_hz", "Netzfrequenz"),
 }
 
+WATCHDOG_TIMEOUT_SECS = 10
+
 
 class SmlExporter:
     def __init__(self) -> None:
         self.device: Optional[str] = None
         self.vendor: Optional[str] = None
         self.metrics: Dict[str, Gauge] = {}
+        self.init_watchdog()
 
     def get_metric(self, obis_id: str) -> Gauge:
         # skip until we have seen vendor and device identifier, so we can populate the according labels
@@ -168,6 +172,27 @@ class SmlExporter:
             logger.debug(
                 "Vendor or device identifiers not initialized, event was ignored."
             )
+        self.reset_watchdog()
+
+    def clear_metrics(self):
+        logger.warning("Timeout on receiving serial data, clearing metrics.")
+        for metric in self.metrics.values():
+            metric.clear()
+
+    def init_watchdog(
+        self,
+    ):
+        """Start a timer that clears data from metrics if not cancelled in time."""
+        logger.debug(
+            f"Setting watchdog for getting new data with a {WATCHDOG_TIMEOUT_SECS} timeout."
+        )
+        timer = Timer(WATCHDOG_TIMEOUT_SECS, self.clear_metrics)
+        timer.start()
+        self.watchdog = timer
+
+    def reset_watchdog(self):
+        self.watchdog.cancel()
+        self.init_watchdog()
 
 
 class UnhandledObisId(Exception):
