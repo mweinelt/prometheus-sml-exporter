@@ -2,11 +2,7 @@ from unittest.mock import MagicMock, Mock
 
 from sml import SmlGetListResponse  # type: ignore
 
-from sml_exporter import SmlExporter, __version__
-
-
-def test_version() -> None:
-    assert __version__ == "0.1.4"
+from sml_exporter import SmlExporter
 
 
 def test_kmf() -> None:

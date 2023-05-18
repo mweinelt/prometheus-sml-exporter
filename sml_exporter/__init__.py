@@ -5,8 +5,6 @@ from typing import Dict, Optional
 from prometheus_client import Gauge
 from sml import SmlGetListResponse, SmlSequence  # type: ignore
 
-__version__ = "0.1.4"
-
 logger = logging.getLogger(__name__)
 
 # https://www.promotic.eu/en/pmdoc/Subsystems/Comm/PmDrivers/IEC62056_OBIS.htm
